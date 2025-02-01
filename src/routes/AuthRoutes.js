@@ -20,12 +20,12 @@ router.post("/login", async (req, res) => {
         const user = await UserModel.findOne({ emailId: req.body.emailId });
 
         if (!user) {
-            return res.status(400).json({ error: "User does not exist" });
+            return res.status(400).json({ emailId: "User does not exist" });
         }
 
         const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ error: "Incorrect password" });
+            return res.status(401).json({ password: "Incorrect password" });
         }
 
         const accessToken = generateAccessToken(user);
