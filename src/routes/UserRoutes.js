@@ -24,7 +24,7 @@ router.get("/find/:query", async (req, res) => {
 router.post("/signUp", async (req, res) => {
     const existingUser = await UserModel.findOne({ emailId: req.body.emailId });
     if (existingUser) {
-        return res.status(400).send("User exists! Please log in.");
+        return res.status(400).send({emailId:"User exists! Please log in."});
     }
 
     try {
