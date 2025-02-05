@@ -5,6 +5,7 @@
   "scripts": {
     "devStart": "nodemon server.js",
     "authStart": "nodemon authServer.js",
+    "quillStart": "nodemon textEditorServer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const DocSchema = new Schema({
     name: String,
     createdBy: String,
-    content: String,
+    content: { type: Object, default: {} },
     allowedUsers:[]
 }, {
     collection: "Documents"
