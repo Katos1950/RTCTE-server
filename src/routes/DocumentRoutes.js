@@ -14,4 +14,21 @@ router.get("/documents", authenticateToken, async (req, res) => {
     }
 });
 
+//create a new document
+router.post("/createNewDoc",authenticateToken,async (req,res)=>{
+    try{
+        const newDoc = new DocModel({
+            content:{},
+            createdBy:req.user.emailId
+        });
+        newDoc.name = "DOC "+ newDoc._id
+        await newDoc.save();
+
+        res.status(201).json(newDoc);
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+})
+
 module.exports = router;

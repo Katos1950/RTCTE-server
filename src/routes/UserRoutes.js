@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/User");
+const authenticateToken = require("../AuthMiddleware")
 
 const router = express.Router();
 
@@ -40,6 +41,20 @@ router.post("/signUp", async (req, res) => {
         res.status(201).send("User Created");
     } catch (error) {
         console.error("Error creating user:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get("/profile",authenticateToken, async (req,res)=>{
+    try {
+        const user = await UserModel.findOne({ emailId: req.user.emailId });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        res.status(200).json({
+            emailId: user.emailId,
+            userName: user.userName,
+        });
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
