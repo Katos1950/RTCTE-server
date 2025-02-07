@@ -7,7 +7,12 @@ const router = express.Router();
 // Get User's Documents
 router.get("/documents", authenticateToken, async (req, res) => {
     try {
-        const docsCreated = await DocModel.find({ createdBy: req.user.emailId });
+        const docsCreated = await DocModel.find({ 
+            $or: [
+                { createdBy: req.user.emailId },
+                { allowedUsers: req.user.emailId }
+              ]
+         });
         res.status(200).json(docsCreated);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -18,16 +23,36 @@ router.get("/documents", authenticateToken, async (req, res) => {
 router.post("/createNewDoc",authenticateToken,async (req,res)=>{
     try{
         const newDoc = new DocModel({
+            name:req.body.name,
             content:{},
             createdBy:req.user.emailId
         });
-        newDoc.name = "DOC "+ newDoc._id
+
         await newDoc.save();
 
         res.status(201).json(newDoc);
     }
     catch(error){
         res.status(500).json({ error: error.message });
+    }
+})
+
+router.delete("/documents/del",authenticateToken, async (req,res)=>{
+    try{
+        const result = await DocModel.deleteOne({
+            name:req.body.name,
+            createdBy:req.user.emailId
+        })
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: "Entry not found" });
+        }
+
+        res.status(200).json({message:"Entry deleted"})
+        
+    }
+    catch(error){
+        res.status(500).json({error:error.message})
     }
 })
 
