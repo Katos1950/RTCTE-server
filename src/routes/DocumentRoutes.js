@@ -10,7 +10,7 @@ router.get("/documents", authenticateToken, async (req, res) => {
         const docsCreated = await DocModel.find({ 
             $or: [
                 { createdBy: req.user.emailId },
-                { allowedUsers: req.user.emailId }
+                { allowedUsers: { $elemMatch: { emailId: req.user.emailId } } }
               ]
          });
         res.status(200).json(docsCreated);

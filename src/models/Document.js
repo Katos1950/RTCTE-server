@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+  const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -7,9 +7,13 @@ const DocSchema = new Schema({
     name: String,
     createdBy: String,
     content: { type: Object, default: {} },
-    allowedUsers:[]
+    allowedUsers: [{
+        emailId: { type: String, required: true },
+        role: { type: String, required: true, enum: ['viewer', 'editor'] }
+    }]
 }, {
-    collection: "Documents"
+    collection: "Documents",
+    timestamps:true
 });
 
 // Create Model
