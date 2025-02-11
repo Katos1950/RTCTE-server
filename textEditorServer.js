@@ -15,13 +15,20 @@ let activeUsers={}
 
 io.on("connection", socket => {
     let userEmail = null; // Variable to store the user's email
+    
     socket.on("get-document", async ({ documentId, emailId }) => {
         if (!documentId) return;
         
         let document = await Document.findById(documentId);
         if (!document) {
             document = await Document.create({ _id: documentId, content: "" });
-        }
+        }    
+
+        const userPermission = document.allowedUsers.find(user => user.emailId === emailId);
+        let isEditor = userPermission && (userPermission.role === "editor");
+        const isViewer = userPermission && (userPermission.role === "viewer");
+        if(document.createdBy===emailId)
+            isEditor=true;
 
         socket.join(documentId);
 
@@ -34,7 +41,7 @@ io.on("connection", socket => {
         io.to(documentId).emit("update-active-users", Array.from(activeUsers[documentId]));
 
 
-        socket.emit("load-document", document.content);
+        socket.emit("load-document", {content:document.content,isEditor,isViewer});
 
         socket.on("send-changes", delta => {
             socket.broadcast.to(documentId).emit("receive-changes", delta);

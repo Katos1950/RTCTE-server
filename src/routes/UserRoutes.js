@@ -21,6 +21,7 @@ router.get("/find/:query", async (req, res) => {
     }
 });
 
+
 // Sign Up User
 router.post("/signUp", async (req, res) => {
     const existingUser = await UserModel.findOne({ emailId: req.body.emailId });
