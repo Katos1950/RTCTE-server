@@ -6,13 +6,13 @@ const authenticateToken = require("../AuthMiddleware")
 const router = express.Router();
 
 // Find User by Email
-router.get("/find/:query", async (req, res) => {
+router.get("/find",authenticateToken, async (req, res) => {
     try {
-        const query = req.params.query;
-        const result = await UserModel.find({ emailId: query });
+        const email = req.query.emailId;
+        const result = await UserModel.find({ emailId:email });
 
         if (result.length > 0) {
-            res.json(result);
+            res.status(200).json(result);
         } else {
             res.status(404).json({ error: "No records found" });
         }

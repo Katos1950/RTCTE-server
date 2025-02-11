@@ -76,4 +76,31 @@ router.put("/documents/rename",authenticateToken, async (req,res)=>{
     }
 })
 
+router.post("/allowUser", authenticateToken, async (req, res) => {
+    try {
+        const { documentId, emailId, role } = req.body;
+
+        if (!documentId || !emailId || !role) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        if (!["viewer", "editor"].includes(role)) {
+            return res.status(400).json({ error: "Invalid role" });
+        }
+
+        const document = await DocModel.findById(documentId);
+
+        if(document.allowedUsers.some(user => user.emailId === emailId))
+            return res.status(400).json({error:"The user already has access to the document"})
+
+        document.allowedUsers.push({ emailId, role });
+        await document.save();
+
+        res.status(200).json({ message: "User added successfully", document });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 module.exports = router;
