@@ -23,6 +23,10 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ emailId: "User does not exist" });
         }
 
+        if(!user.isVerified){
+            return res.status(400).json({ emailId: "User is not verified" });
+        }
+
         const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ password: "Incorrect password" });
@@ -59,6 +63,27 @@ router.post("/token", async (req, res) => {
 router.delete("/logout", async (req, res) => {
     await RefTokModel.deleteOne({ token: req.body.token });
     res.sendStatus(204);
+});
+
+router.get("/verify/:token", async (req, res) => {
+    try {
+        const { token } = req.params;
+        const decoded = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET);
+
+        // Find the user using emailId instead of _id
+        const user = await UserModel.findOneAndUpdate(
+            { emailId: decoded.emailId },  // Changed to emailId
+            { isVerified: true }
+        );
+
+        if (!user) {
+            return res.status(400).json({ error: "User not found" });
+        }
+
+        res.status(200).send("Email verified successfully!");
+    } catch (error) {
+        res.status(400).json({ error: "Invalid or expired token" });
+    }
 });
 
 module.exports = router;

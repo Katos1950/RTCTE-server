@@ -2,8 +2,16 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/User");
 const authenticateToken = require("../AuthMiddleware")
-
+const sendEmailVerification = require("../EmailVerification")
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+
+const generateVerificationToken = (emailId) => {
+    if (!emailId) {
+        throw new Error("Email is required to generate a verification token");
+    }
+    return jwt.sign({ emailId }, process.env.EMAIL_VERIFY_SECRET, { expiresIn: "1h" });
+};
 
 // Find User by Email
 router.get("/find",authenticateToken, async (req, res) => {
@@ -26,7 +34,12 @@ router.get("/find",authenticateToken, async (req, res) => {
 router.post("/signUp", async (req, res) => {
     const existingUser = await UserModel.findOne({ emailId: req.body.emailId });
     if (existingUser) {
-        return res.status(400).send({emailId:"User exists! Please log in."});
+        if (!existingUser.isVerified) {
+            const deleteResult = await UserModel.deleteOne({ emailId: req.body.emailId });
+        }
+        else{
+            return res.status(400).send({emailId:"User exists! Please log in."});
+        }
     }
 
     try {
@@ -35,10 +48,13 @@ router.post("/signUp", async (req, res) => {
         const newUser = new UserModel({
             userName: req.body.userName,
             emailId: req.body.emailId,
-            password: hashedPassword
+            password: hashedPassword,
+            isVerified: false
         });
 
         await newUser.save();
+        const token = generateVerificationToken(req.body.emailId)
+        await sendEmailVerification(req.body.emailId,token)
         res.status(201).send("User Created");
     } catch (error) {
         console.error("Error creating user:", error);
