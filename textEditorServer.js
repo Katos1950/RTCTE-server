@@ -50,20 +50,25 @@ io.on("connection", socket => {
         socket.on("save-document", async content => {
             await Document.findByIdAndUpdate(documentId, { content });
         });
+
+        socket.on("send-cursor", ({ emailId, range }) => {
+            socket.broadcast.to(documentId).emit("receive-cursor", { emailId, range });
+          });             
     });
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
+        console.log(`User ${userEmail} disconnected`);
+    
         if (userEmail) {
-            // Iterate through active users and remove the user's email
             for (let documentId in activeUsers) {
                 if (activeUsers[documentId].has(userEmail)) {
+                    // Then, remove the user from activeUsers
                     activeUsers[documentId].delete(userEmail);
                     console.log(`Removed ${userEmail} from document ${documentId}`);
+                    // Update active users list in the UI
                     io.to(documentId).emit("update-active-users", Array.from(activeUsers[documentId]));
                 }
             }
         }
-        console.log(activeUsers); // Log active users after disconnection
     });
 });
