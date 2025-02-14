@@ -66,6 +66,7 @@ io.on("connection", socket => {
                     activeUsers[documentId].delete(userEmail);
                     console.log(`Removed ${userEmail} from document ${documentId}`);
                     // Update active users list in the UI
+                    io.to(documentId).emit("remove-cursor", userEmail);
                     io.to(documentId).emit("update-active-users", Array.from(activeUsers[documentId]));
                 }
             }
