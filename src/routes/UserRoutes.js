@@ -93,6 +93,7 @@ router.post("/sendPassResetLink",async(req,res)=>{
     }
     const token = generateResetPassToken(emailId)
     await sendPassResVerification(emailId,token)
+    res.sendStatus(200)
 })
 
 router.post("/resetpassword",async (req,res)=>{
