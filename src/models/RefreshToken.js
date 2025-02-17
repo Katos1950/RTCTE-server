@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 
 // Define User Schema
 const RefTokSchema = new Schema({
-    token : String
+    token : String,
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: 20 // Entry will be deleted 120 seconds (2 minutes) after creation
+      }
 }, {
     collection: "RefreshTokens"
 });

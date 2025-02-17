@@ -47,9 +47,14 @@ io.on("connection", socket => {
             socket.broadcast.to(documentId).emit("receive-changes", delta);
         });
 
-        socket.on("save-document", async content => {
-            await Document.findByIdAndUpdate(documentId, { content });
-        });
+        try{
+            socket.on("save-document", async content => {
+                await Document.findByIdAndUpdate(documentId, { content });
+            });
+        }
+        catch(error){
+            console.log(error)
+        }
 
         socket.on("send-cursor", ({ emailId, range }) => {
             socket.broadcast.to(documentId).emit("receive-cursor", { emailId, range });

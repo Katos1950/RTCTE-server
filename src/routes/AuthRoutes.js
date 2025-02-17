@@ -7,7 +7,7 @@ const RefTokModel = require("../models/RefreshToken");
 const router = express.Router();
 
 function generateAccessToken(user) {
-    return jwt.sign({ emailId: user.emailId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" });
+    return jwt.sign({ emailId: user.emailId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "10s" });
 }
 
 // Login User
@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
         }
 
         const accessToken = generateAccessToken(user);
-        const refreshToken = jwt.sign({ emailId: user.emailId }, process.env.REFRESH_TOKEN_SECRET);
+        const refreshToken = jwt.sign({ emailId: user.emailId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "20s" });
 
         await RefTokModel.create({ token: refreshToken });
 
