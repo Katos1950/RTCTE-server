@@ -8,7 +8,7 @@ const RefTokSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 20 // Entry will be deleted 120 seconds (2 minutes) after creation
+        expires: 604800 // Entry will be deleted 7 days after creation
       }
 }, {
     collection: "RefreshTokens"
