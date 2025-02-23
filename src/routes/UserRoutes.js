@@ -1,5 +1,5 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const UserModel = require("../models/User");
 const authenticateToken = require("../AuthMiddleware")
 const sendEmailVerification = require("../EmailVerification")

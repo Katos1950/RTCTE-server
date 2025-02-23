@@ -1,11 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const connectDb = require("../src/Db");
+const connectDb = require("./src/Db");
 
 // Import Routes
-const userRoutes = require("../src/routes/UserRoutes");
-const documentRoutes = require("../src/routes/DocumentRoutes");
+const userRoutes = require("./src/routes/UserRoutes");
+const documentRoutes = require("./src/routes/DocumentRoutes");
 
 const app = express();
 

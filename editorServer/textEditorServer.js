@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Document = require('../src/models/Document');
-const connectDb = require("../src/Db");
+const Document = require('./src/models/Document');
+const connectDb = require("./src/Db");
 
 connectDb();
 
