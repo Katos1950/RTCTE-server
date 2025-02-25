@@ -6,7 +6,7 @@ connectDb();
 
 const io = require("socket.io")(3001, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: 'http://18.119.123.153',
         methods: ['GET', 'POST']
     }
 });

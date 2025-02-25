@@ -2,7 +2,7 @@ var nodemailer = require('nodemailer');
 
 const sendPassResVerification =async (emailId,token)=>{
     //const verificationLink = `http://localhost:5000/users/resetpassword?token=${token}`;
-    const verificationLink = `http://localhost:3000/resetpassword/${token}`;
+    const verificationLink = `http://18.119.123.153/resetpassword/${token}`;
 
 
     var transporter = nodemailer.createTransport({
