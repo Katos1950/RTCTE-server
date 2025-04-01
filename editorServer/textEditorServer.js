@@ -6,8 +6,9 @@ connectDb();
 
 const io = require("socket.io")(3001, {
     cors: {
-        origin: 'http://18.119.123.153',
-        methods: ['GET', 'POST']
+        origin: ["https://co-write.online"],
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
