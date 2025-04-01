@@ -2,7 +2,7 @@ var nodemailer = require('nodemailer');
 
 const sendPassResVerification =async (emailId,token)=>{
     //const verificationLink = `http://localhost:5000/users/resetpassword?token=${token}`;
-    const verificationLink = `https://cowrite-app.netlify.app/resetpassword/${token}`;
+    const verificationLink = `https://api.co-write.online/api/resetpassword/${token}`;
 
 
     var transporter = nodemailer.createTransport({
