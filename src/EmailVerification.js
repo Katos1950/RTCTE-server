@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 
 const sendEmailVerification =async (emailId,token)=>{
-    const verificationLink = `http://localhost:4000/users/verify/${token}`;
+    const verificationLink = `http://3.149.6.22/auth/users/verify/${token}`;
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
