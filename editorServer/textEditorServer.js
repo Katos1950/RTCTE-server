@@ -1,17 +1,18 @@
+const http = require('http');
 const mongoose = require('mongoose');
 const Document = require('./src/models/Document');
 const connectDb = require("./src/Db");
 
 connectDb();
-
-const io = require("socket.io")(3001, {
+const server = http.createServer();
+const io = require("socket.io")(server, {
     cors: {
-        origin: ["https://co-write.online"],
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
-
+      origin: "https://co-write.online",
+      credentials: true
+    },
+    path: "/editor/socket.io" // Match Nginx path
+  });
+  
 let activeUsers={}
 
 io.on("connection", socket => {
@@ -79,3 +80,6 @@ io.on("connection", socket => {
         }
     });
 });
+server.listen(3001, 'localhost', () => {
+    console.log('Socket.IO server running on port 3001');
+  });
