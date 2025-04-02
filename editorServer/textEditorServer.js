@@ -8,9 +8,11 @@ const server = http.createServer();
 const io = require("socket.io")(server, {
     cors: {
       origin: "https://co-write.online",
+      methods: ["GET", "POST"],
       credentials: true
     },
-    path: "/editor/socket.io" // Match Nginx path
+    path: "/editor/socket.io", // Must match client path
+    transports: ["websocket", "polling"]
   });
   
 let activeUsers={}
