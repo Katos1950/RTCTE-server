@@ -4,16 +4,30 @@ const Document = require('./src/models/Document');
 const connectDb = require("./src/Db");
 
 connectDb();
-const server = http.createServer();
-const io = require("socket.io")(server, {
+//new
+const { Server } = require("socket.io");
+const cors = require("cors");
+const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
     cors: {
-      origin: "https://co-write.online",
-      methods: ["GET", "POST"],
-      credentials: true
-    },
-    path: "/editor/socket.io", // Must match client path
-    transports: ["websocket", "polling"]
+      origin: "https://co-write.online", // Replace with your frontend URL
+      methods: ["GET", "POST"]
+    }
   });
+  
+  app.use(cors());
+// const server = http.createServer();
+// const io = require("socket.io")(server, {
+//     cors: {
+//       origin: "https://co-write.online",
+//       methods: ["GET", "POST"],
+//       credentials: true
+//     },
+//     path: "/editor/socket.io", // Must match client path
+//     transports: ["websocket", "polling"]
+//   });
   
 let activeUsers={}
 
