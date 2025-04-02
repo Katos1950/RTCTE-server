@@ -5,6 +5,7 @@ const connectDb = require("./src/Db");
 
 connectDb();
 //new
+const express = require("express");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const app = express();
@@ -12,9 +13,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-      origin: "https://co-write.online", // Replace with your frontend URL
-      methods: ["GET", "POST"]
-    }
+      origin: "https://co-write.online",
+      methods: ["GET", "POST"],
+      credentials: true // Add credentials
+    },
+    path: "/editor/socket.io" // Add this to match client path
   });
   
   app.use(cors());
@@ -96,6 +99,6 @@ io.on("connection", socket => {
         }
     });
 });
-server.listen(3001, 'localhost', () => {
+server.listen(3001, '0.0.0.0', () => {
     console.log('Socket.IO server running on port 3001');
   });
