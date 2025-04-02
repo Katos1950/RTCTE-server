@@ -6,7 +6,9 @@ const sendPassResVerification =async (emailId,token)=>{
 
 
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+ 	host: 'smtp.ionos.com', // Replace with your domain's SMTP host
+        port: 587, // or 587 depending on your provider's requirements
+        secure: false, // true for port 465, false for port 587 (or adjust as needed)
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
