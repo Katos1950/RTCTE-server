@@ -17,7 +17,7 @@ const sendEmailVerification =async (emailId,token)=>{
     var mailOptions = {
     from:  process.env.EMAIL_USER,
     to: emailId,
-    subject: 'Sending Email using Node.js',
+    subject: 'Co-Write Email Verification',
     html: `
       <p>Click the link below to verify your email:</p>
       <a href="${verificationLink}" target="_blank">${verificationLink}</a>
