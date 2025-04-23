@@ -1,0 +1,27 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: [self-hosted,linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Copy updated files to server folder
+        run: |
+          echo "Copying files to server directory..."
+          rsync -av --delete ./ ../../../../server/
+
+      - name: Rebuild & restart container
+        working-directory: ../../../../server/
+        run: |
+          echo "Stopping any running containers..."
+          docker-compose down || true
+
+          echo "Rebuilding and starting containers..."
+          docker-compose up -d --build
