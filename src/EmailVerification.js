@@ -1,7 +1,6 @@
 var nodemailer = require('nodemailer');
 
 const sendEmailVerification =async (emailId,token)=>{
-    //const verificationLink = `http://3.149.6.22/auth/users/verify/${token}`;
     const verificationLink = `https://api.co-write.online/auth/users/verify/${token}`;
 
     var transporter = nodemailer.createTransport({

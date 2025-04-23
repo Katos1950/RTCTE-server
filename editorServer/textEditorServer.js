@@ -15,27 +15,17 @@ const io = new Server(server, {
     cors: {
       origin: "https://co-write.online",
       methods: ["GET", "POST"],
-      credentials: true // Add credentials
+      credentials: true
     },
-    path: "/editor/socket.io" // Add this to match client path
+    path: "/editor/socket.io" 
   });
   
   app.use(cors());
-// const server = http.createServer();
-// const io = require("socket.io")(server, {
-//     cors: {
-//       origin: "https://co-write.online",
-//       methods: ["GET", "POST"],
-//       credentials: true
-//     },
-//     path: "/editor/socket.io", // Must match client path
-//     transports: ["websocket", "polling"]
-//   });
-  
+
 let activeUsers={}
 
 io.on("connection", socket => {
-    let userEmail = null; // Variable to store the user's email
+    let userEmail = null; 
     
     socket.on("get-document", async ({ documentId, emailId }) => {
         if (!documentId) return;

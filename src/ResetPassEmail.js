@@ -1,7 +1,6 @@
 var nodemailer = require('nodemailer');
 
 const sendPassResVerification =async (emailId,token)=>{
-    //const verificationLink = `http://localhost:5000/users/resetpassword?token=${token}`;
     const verificationLink = `https://co-write.online/resetpassword/${token}`;
 
 
